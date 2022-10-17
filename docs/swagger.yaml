@@ -1,0 +1,95 @@
+basePath: /v1
+host: localhost:8080
+info:
+  contact:
+    email: support@swagger.io
+    name: API Support
+    url: http://www.swagger.io/support
+  description: This is a sample server celler server.
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  termsOfService: http://swagger.io/terms/
+  title: Swagger Example API
+  version: "1.0"
+paths:
+  /student:
+    post:
+      consumes:
+      - application/json
+      description: add
+      parameters:
+      - description: Some string
+        in: query
+        name: name
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ok
+          schema:
+            type: string
+        "404":
+          description: not ok
+          schema:
+            type: string
+      summary: add student
+      tags:
+      - student
+  /student/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: delete
+      parameters:
+      - description: Some id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ok
+          schema:
+            type: string
+        "404":
+          description: not ok
+          schema:
+            type: string
+      summary: delete student
+      tags:
+      - student
+    patch:
+      consumes:
+      - application/json
+      description: update
+      parameters:
+      - description: Some string
+        in: query
+        name: name
+        required: true
+        type: string
+      - description: Some id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ok
+          schema:
+            type: string
+        "404":
+          description: not ok
+          schema:
+            type: string
+      summary: update student
+      tags:
+      - student
+swagger: "2.0"
