@@ -21,9 +21,6 @@ import (
 func AddNewStudent(c *gin.Context) {
 	var student Models.Student
 	c.BindJSON(&student)
-	student.Name = c.Query("Name")
-	student.Surname =  c.Query("Surname")
-	student.Age = c.Query("Age")
 	err := Models.AddNewStudent(&student)
 	if err != nil {
 		ApiHelpers.RespondJSON(c, 404, student)
