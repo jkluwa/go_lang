@@ -7,10 +7,25 @@ import (
 	"github.com/gin-gonic/gin"
 	swaggerfiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
+	"github.com/gin-contrib/cors"
 )
+
 
 func SetupRouter() *gin.Engine {
 	r := gin.Default()
+	
+	corsConfig := cors.DefaultConfig()
+
+	corsConfig.AllowOrigins = []string{"*"}
+	// To be able to send tokens to the server.
+	corsConfig.AllowCredentials = true
+
+	// OPTIONS method for ReactJS
+	corsConfig.AddAllowMethods("*")
+
+	// Register the middleware
+	r.Use(cors.New(corsConfig))
+
 	v1 := r.Group("/v1")
 	{
 		v1.POST("student", Controllers.AddNewStudent)

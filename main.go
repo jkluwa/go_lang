@@ -4,7 +4,6 @@ import (
 	"praktyka/Config"
 	"praktyka/Models"
 	"praktyka/Routers"
-
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
 )
@@ -24,6 +23,8 @@ var err error
 
 // @host      localhost:8080
 // @BasePath  /v1
+
+
 
 func main() {
 	Config.DB, err = gorm.Open(sqlite.Open("school.db"), &gorm.Config{})

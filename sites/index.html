@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <style>
-        form {
+        .form {
             display: flex;
             flex-direction: column;
             gap: 5px;
@@ -16,21 +16,51 @@
             justify-content: space-between;
         }
     </style>
+    <script>
+        function add() {
+            console.log("KURWAAA")
+            const xhttp = new XMLHttpRequest()
+            const name = document.getElementById("addName").value
+            const surname = document.getElementById("addSurname").value
+            const age = document.getElementById("addAge").value
+            xhttp.open("POST", "http://localhost:8080/v1/student")
+            xhttp.withCredentials = false
+            let json = JSON.stringify({
+                Name: name,
+                Surname: surname,
+                Age: age
+            })
+            xhttp.setRequestHeader("Content-type", "application/json")
+            console.log(json)
+            xhttp.send(json)
+            }
+        function del() {
+            console.log("KURWAAA")
+            const xhttp = new XMLHttpRequest()
+            const id = document.getElementById("deleteId").value
+            xhttp.open("DELETE", "http://localhost:8080/v1/student/"+id)
+            xhttp.withCredentials = false
+            xhttp.setRequestHeader("Content-type", "application/json")
+            xhttp.send()
+        }
+    </script>
 </head>
 <body>
-    <form method="get">
-        <label>name</label><input type="text" />
-        <label>password</label><input type="text" />
-        <input type="submit" value="Add user">
-    </form>
-    <form method="get">
-        <label>id</label><input type="text" />
-        <input type="submit" value="Delete user">
-    </form>
-    <form method="get">
-        <label>name</label><input type="text" />
-        <label>password</label><input type="text" />
-        <input type="submit" value="Update user">
-    </form>
+    <div class="form">
+        <label>name</label><input id="addName" name="name" type="text" />
+        <label>surname</label><input id="addSurname" name="surname" type="text" />
+        <label>age</label><input id="addAge" name="age" type="number" min="5" />
+        <button onclick="return add()" >Add user</button>
+    </div>
+    <div class="form">
+        <label>id</label><input id="deleteId" type="text" />
+        <button onclick="return del()" >Delete user</button>
+    </div>
+    <div class="form">
+        <label>name</label><input id="updateName" type="text" />
+        <label>username</label><input id="updateSurname" type="text" />
+        <label>age</label><input id="updateAge" type="number" min="5" />
+        <button onclick="return update()" >Update user</button>
+    </div>
 </body>
 </html>
