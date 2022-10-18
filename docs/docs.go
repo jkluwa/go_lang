@@ -41,8 +41,22 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "Some string",
-                        "name": "name",
+                        "description": "Some name",
+                        "name": "Name",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Some surname",
+                        "name": "Surname",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Some age",
+                        "name": "Age",
                         "in": "query",
                         "required": true
                     }
@@ -64,8 +78,8 @@ const docTemplate = `{
             }
         },
         "/student/{id}": {
-            "delete": {
-                "description": "delete",
+            "put": {
+                "description": "update",
                 "consumes": [
                     "application/json"
                 ],
@@ -75,8 +89,29 @@ const docTemplate = `{
                 "tags": [
                     "student"
                 ],
-                "summary": "delete student",
+                "summary": "update student",
                 "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Some name",
+                        "name": "Name",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Some surname",
+                        "name": "Surname",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Some age",
+                        "name": "Age",
+                        "in": "query",
+                        "required": true
+                    },
                     {
                         "type": "string",
                         "description": "Some id",
@@ -100,8 +135,8 @@ const docTemplate = `{
                     }
                 }
             },
-            "patch": {
-                "description": "update",
+            "delete": {
+                "description": "delete",
                 "consumes": [
                     "application/json"
                 ],
@@ -111,15 +146,8 @@ const docTemplate = `{
                 "tags": [
                     "student"
                 ],
-                "summary": "update student",
+                "summary": "delete student",
                 "parameters": [
-                    {
-                        "type": "string",
-                        "description": "Some string",
-                        "name": "name",
-                        "in": "query",
-                        "required": true
-                    },
                     {
                         "type": "string",
                         "description": "Some id",
