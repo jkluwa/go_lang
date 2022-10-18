@@ -19,9 +19,19 @@ paths:
       - application/json
       description: add
       parameters:
-      - description: Some string
+      - description: Some name
         in: query
-        name: name
+        name: Name
+        required: true
+        type: string
+      - description: Some surname
+        in: query
+        name: Surname
+        required: true
+        type: string
+      - description: Some age
+        in: query
+        name: Age
         required: true
         type: string
       produces:
@@ -63,14 +73,24 @@ paths:
       summary: delete student
       tags:
       - student
-    patch:
+    put:
       consumes:
       - application/json
       description: update
       parameters:
-      - description: Some string
+      - description: Some name
         in: query
-        name: name
+        name: Name
+        required: true
+        type: string
+      - description: Some surname
+        in: query
+        name: Surname
+        required: true
+        type: string
+      - description: Some age
+        in: query
+        name: Age
         required: true
         type: string
       - description: Some id

@@ -3,9 +3,8 @@ package Controllers
 import (
 	"praktyka/ApiHelpers"
 	"praktyka/Models"
-	"crypto/md5"
-	"encoding/hex"
 	"github.com/gin-gonic/gin"
+	"strconv"
 )
 // addStudent godoc
 // @Summary      add student
@@ -13,16 +12,18 @@ import (
 // @Tags         student
 // @Accept       json
 // @Produce      json
-// @Param   	 Username      query   string     true  "Some string"
+// @Param   	 Name      query   string     true  "Some name"
+// @Param   	 Surname  query   string     true  "Some surname"
+// @Param   	 Age       query   string     true  "Some age"
 // @Success      200  {object}  string "ok"
 // @Failure		 404  {object}	string "not ok"
 // @Router       /student [post]
 func AddNewStudent(c *gin.Context) {
 	var student Models.Student
 	c.BindJSON(&student)
-	student.Username = c.Query("Username")
-	hash := md5.Sum([]byte(c.Query("Password")))
-	student.HashedPassword =  hex.EncodeToString(hash[:])
+	student.Name = c.Query("Name")
+	student.Surname =  c.Query("Surname")
+	student.Age = c.Query("Age")
 	err := Models.AddNewStudent(&student)
 	if err != nil {
 		ApiHelpers.RespondJSON(c, 404, student)
@@ -36,20 +37,23 @@ func AddNewStudent(c *gin.Context) {
 // @Tags         student
 // @Accept       json
 // @Produce      json
-// @Param   	 Username      query   string     true  "Some string"
+// @Param   	 Name      query   string     true  "Some name"
+// @Param   	 Surname   query   string     true  "Some surname"
+// @Param   	 Age       query   string     true  "Some age"
 // @Param   	 id      path   string     true  "Some id"
 // @Success      200  {object}  string "ok"
 // @Failure		 404  {object}	string "not ok"
 // @Router       /student/{id} [put]
 func UpdateStudent(c *gin.Context) {
 	var student Models.Student
-	student.Username = c.DefaultQuery("Username", Models.GetStudent(c.Params.ByName("id")).Username)
-	if c.DefaultQuery("Password", "") != "" {
-		hash := md5.Sum([]byte(c.DefaultQuery("Password", "")))	
-		student.HashedPassword = hex.EncodeToString(hash[:])
-	} else {
-		student.HashedPassword = Models.GetStudent(c.Params.ByName("id")).HashedPassword
+	student.Name = c.DefaultQuery("Name", Models.GetStudent(c.Params.ByName("id")).Name)
+	student.Surname = c.DefaultQuery("Surname", Models.GetStudent(c.Params.ByName("id")).Surname)
+	student.Age = c.DefaultQuery("Age", Models.GetStudent(c.Params.ByName("id")).Age)
+	id, er := strconv.ParseUint(c.Params.ByName("id"), 10, 32)
+	if er != nil {
+		ApiHelpers.RespondJSON(c, 404, student)
 	}
+	student.ID = uint(id)
 	err := Models.UpdateStudent(&student, c.Params.ByName("id"))
 	if err != nil {
 		ApiHelpers.RespondJSON(c, 404, student)
@@ -68,12 +72,12 @@ func UpdateStudent(c *gin.Context) {
 // @Param   	 id      path   string     true  "Some id"
 // @Router       /student/{id} [delete]
 func DeleteStudent(c *gin.Context) {
-	var student Models.Student
 	id := c.Params.ByName("id")
+	var student Models.Student = Models.GetStudent(id)
 	err := Models.DeleteStudent(&student, id)
 	if err != nil {
-		ApiHelpers.RespondJSON(c, 404, student)
+		ApiHelpers.RespondJSON(c, 404, &student)
 	} else {
-		ApiHelpers.RespondJSON(c, 200, student)
+		ApiHelpers.RespondJSON(c, 200, &student)
 	}
 }

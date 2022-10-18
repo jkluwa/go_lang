@@ -6,6 +6,7 @@ import (
 
 type Student struct {
 	gorm.Model
-	Username string `json:"name"`
-	HashedPassword string `json:"hashed_password"`
+	Name string `json:"name"`
+	Surname string `json:"surname"`
+	Age string `json:"age"`
 }
