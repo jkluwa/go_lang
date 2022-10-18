@@ -4,10 +4,9 @@ import (
 	"praktyka/Config"
 )
 
-func GetStudent(id string) (name string) {
-	var student Student
+func GetStudent(id string) (student Student) {
 	Config.DB.Where("id = ?", id).First(&student)
-	return student.Name
+	return student
 }
 
 func AddNewStudent(b *Student) (err error) {
@@ -20,7 +19,8 @@ func AddNewStudent(b *Student) (err error) {
 func UpdateStudent(b *Student, id string) (err error) {
 	var user Student
 	Config.DB.Where("id = ?", id).First(&user)
-	user.Name = b.Name
+	user.Username = b.Username
+	user.HashedPassword = b.HashedPassword
 	Config.DB.Save(&user)
 	return nil
 }

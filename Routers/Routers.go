@@ -14,7 +14,7 @@ func SetupRouter() *gin.Engine {
 	v1 := r.Group("/v1")
 	{
 		v1.POST("student", Controllers.AddNewStudent)
-		v1.PATCH("student/:id", Controllers.UpdateStudent)
+		v1.PUT("student/:id", Controllers.UpdateStudent)
 		v1.DELETE("student/:id", Controllers.DeleteStudent)
 	}
 

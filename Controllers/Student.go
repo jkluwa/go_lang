@@ -3,7 +3,8 @@ package Controllers
 import (
 	"praktyka/ApiHelpers"
 	"praktyka/Models"
-
+	"crypto/md5"
+	"encoding/hex"
 	"github.com/gin-gonic/gin"
 )
 // addStudent godoc
@@ -12,14 +13,16 @@ import (
 // @Tags         student
 // @Accept       json
 // @Produce      json
-// @Param   	 name      query   string     true  "Some string"
+// @Param   	 Username      query   string     true  "Some string"
 // @Success      200  {object}  string "ok"
 // @Failure		 404  {object}	string "not ok"
 // @Router       /student [post]
 func AddNewStudent(c *gin.Context) {
 	var student Models.Student
 	c.BindJSON(&student)
-	student.Name = c.Query("name")
+	student.Username = c.Query("Username")
+	hash := md5.Sum([]byte(c.Query("Password")))
+	student.HashedPassword =  hex.EncodeToString(hash[:])
 	err := Models.AddNewStudent(&student)
 	if err != nil {
 		ApiHelpers.RespondJSON(c, 404, student)
@@ -33,14 +36,20 @@ func AddNewStudent(c *gin.Context) {
 // @Tags         student
 // @Accept       json
 // @Produce      json
-// @Param   	 name      query   string     true  "Some string"
+// @Param   	 Username      query   string     true  "Some string"
 // @Param   	 id      path   string     true  "Some id"
 // @Success      200  {object}  string "ok"
 // @Failure		 404  {object}	string "not ok"
-// @Router       /student/{id} [patch]
+// @Router       /student/{id} [put]
 func UpdateStudent(c *gin.Context) {
 	var student Models.Student
-	student.Name = c.DefaultQuery("name", Models.GetStudent(c.Params.ByName("id")))
+	student.Username = c.DefaultQuery("Username", Models.GetStudent(c.Params.ByName("id")).Username)
+	if c.DefaultQuery("Password", "") != "" {
+		hash := md5.Sum([]byte(c.DefaultQuery("Password", "")))	
+		student.HashedPassword = hex.EncodeToString(hash[:])
+	} else {
+		student.HashedPassword = Models.GetStudent(c.Params.ByName("id")).HashedPassword
+	}
 	err := Models.UpdateStudent(&student, c.Params.ByName("id"))
 	if err != nil {
 		ApiHelpers.RespondJSON(c, 404, student)
