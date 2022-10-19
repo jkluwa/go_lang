@@ -43,9 +43,7 @@ func AddNewStudent(c *gin.Context) {
 // @Router       /student/{id} [put]
 func UpdateStudent(c *gin.Context) {
 	var student Models.Student
-	student.Name = c.DefaultQuery("Name", Models.GetStudent(c.Params.ByName("id")).Name)
-	student.Surname = c.DefaultQuery("Surname", Models.GetStudent(c.Params.ByName("id")).Surname)
-	student.Age = c.DefaultQuery("Age", Models.GetStudent(c.Params.ByName("id")).Age)
+	c.BindJSON(&student)
 	id, er := strconv.ParseUint(c.Params.ByName("id"), 10, 32)
 	if er != nil {
 		ApiHelpers.RespondJSON(c, 404, student)
