@@ -14,6 +14,24 @@ info:
   version: "1.0"
 paths:
   /student:
+    get:
+      consumes:
+      - application/json
+      description: get
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ok
+          schema:
+            type: string
+        "404":
+          description: not ok
+          schema:
+            type: string
+      summary: get students
+      tags:
+      - students
     post:
       consumes:
       - application/json

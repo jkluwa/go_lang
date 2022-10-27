@@ -8,7 +8,9 @@ require (
 	github.com/PuerkitoBio/purell v1.2.0 // indirect
 	github.com/PuerkitoBio/urlesc v0.0.0-20170810143723-de5bf2ad4578 // indirect
 	github.com/cpuguy83/go-md2man/v2 v2.0.2 // indirect
+	github.com/dgrijalva/jwt-go v3.2.0+incompatible // indirect
 	github.com/ghodss/yaml v1.0.0 // indirect
+	github.com/gin-contrib/cors v1.4.0 // indirect
 	github.com/gin-contrib/sse v0.1.0 // indirect
 	github.com/gin-gonic/gin v1.8.1 // indirect
 	github.com/go-openapi/jsonpointer v0.19.5 // indirect
@@ -18,6 +20,7 @@ require (
 	github.com/go-playground/locales v0.14.0 // indirect
 	github.com/go-playground/universal-translator v0.18.0 // indirect
 	github.com/go-playground/validator/v10 v10.11.1 // indirect
+	github.com/go-redis/redis/v7 v7.4.1 // indirect
 	github.com/goccy/go-json v0.9.11 // indirect
 	github.com/google/go-cmp v0.5.8 // indirect
 	github.com/jinzhu/inflection v1.0.0 // indirect
@@ -37,14 +40,15 @@ require (
 	github.com/swaggo/files v0.0.0-20220728132757-551d4a08d97a // indirect
 	github.com/swaggo/gin-swagger v1.5.3 // indirect
 	github.com/swaggo/swag v1.8.6 // indirect
+	github.com/twinj/uuid v1.0.0 // indirect
 	github.com/ugorji/go/codec v1.2.7 // indirect
 	github.com/urfave/cli/v2 v2.20.2 // indirect
 	github.com/xrash/smetrics v0.0.0-20201216005158-039620a65673 // indirect
-	golang.org/x/crypto v0.0.0-20221012134737-56aed061732a // indirect
+	golang.org/x/crypto v0.1.0 // indirect
 	golang.org/x/exp v0.0.0-20220722155223-a9213eeb770e // indirect
 	golang.org/x/exp/typeparams v0.0.0-20220722155223-a9213eeb770e // indirect
 	golang.org/x/mod v0.6.0-dev.0.20220419223038-86c51ed26bb4 // indirect
-	golang.org/x/net v0.0.0-20221017152216-f25eb7ecb193 // indirect
+	golang.org/x/net v0.1.0 // indirect
 	golang.org/x/sync v0.0.0-20220722155255-886fb9371eb4 // indirect
 	golang.org/x/sys v0.1.0 // indirect
 	golang.org/x/text v0.4.0 // indirect

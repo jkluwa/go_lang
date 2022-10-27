@@ -26,6 +26,33 @@ const docTemplate = `{
     "basePath": "{{.BasePath}}",
     "paths": {
         "/student": {
+            "get": {
+                "description": "get",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "students"
+                ],
+                "summary": "get students",
+                "responses": {
+                    "200": {
+                        "description": "ok",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "not ok",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            },
             "post": {
                 "description": "add",
                 "consumes": [

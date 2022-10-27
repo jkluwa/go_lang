@@ -1,11 +1,13 @@
 package Controllers
 
 import (
+	"praktyka/Authentication"
 	"praktyka/ApiHelpers"
 	"praktyka/Models"
 	"github.com/gin-gonic/gin"
 	"strconv"
 )
+
 // addStudent godoc
 // @Summary      add student
 // @Description  add
@@ -19,9 +21,14 @@ import (
 // @Failure		 404  {object}	string "not ok"
 // @Router       /student [post]
 func AddNewStudent(c *gin.Context) {
+	err := Authentication.RoleAuthentication(c, "update")
+	if err != nil {
+		ApiHelpers.RespondJSON(c, 404, "invalid role")
+		return
+	}
 	var student Models.Student
 	c.BindJSON(&student)
-	err := Models.AddNewStudent(&student)
+	err = Models.AddNewStudent(&student)
 	if err != nil {
 		ApiHelpers.RespondJSON(c, 404, student)
 	} else {
@@ -42,16 +49,19 @@ func AddNewStudent(c *gin.Context) {
 // @Failure		 404  {object}	string "not ok"
 // @Router       /student/{id} [put]
 func UpdateStudent(c *gin.Context) {
+	err := Authentication.RoleAuthentication(c, "update")
+	if err != nil {
+		ApiHelpers.RespondJSON(c, 404, "invalid role")
+		return
+	}
 	var student Models.Student
-	student.Name = c.DefaultQuery("Name", Models.GetStudent(c.Params.ByName("id")).Name)
-	student.Surname = c.DefaultQuery("Surname", Models.GetStudent(c.Params.ByName("id")).Surname)
-	student.Age = c.DefaultQuery("Age", Models.GetStudent(c.Params.ByName("id")).Age)
+	c.BindJSON(&student)
 	id, er := strconv.ParseUint(c.Params.ByName("id"), 10, 32)
 	if er != nil {
 		ApiHelpers.RespondJSON(c, 404, student)
 	}
 	student.ID = uint(id)
-	err := Models.UpdateStudent(&student, c.Params.ByName("id"))
+	err = Models.UpdateStudent(&student, c.Params.ByName("id"))
 	if err != nil {
 		ApiHelpers.RespondJSON(c, 404, student)
 	} else {
@@ -69,12 +79,26 @@ func UpdateStudent(c *gin.Context) {
 // @Param   	 id      path   string     true  "Some id"
 // @Router       /student/{id} [delete]
 func DeleteStudent(c *gin.Context) {
+	err := Authentication.RoleAuthentication(c, "update")
+	if err != nil {
+		ApiHelpers.RespondJSON(c, 404, "invalid role")
+		return
+	}
 	id := c.Params.ByName("id")
 	var student Models.Student = Models.GetStudent(id)
-	err := Models.DeleteStudent(&student, id)
+	err = Models.DeleteStudent(&student, id)
 	if err != nil {
 		ApiHelpers.RespondJSON(c, 404, &student)
 	} else {
 		ApiHelpers.RespondJSON(c, 200, &student)
 	}
+}
+
+func GetStudents(c *gin.Context) {
+	 students, err := Models.GetStudents()
+	if err != nil {
+		ApiHelpers.RespondJSON(c, 400, "Error occured")
+	 } else {
+		ApiHelpers.RespondJSON(c, 200, students)
+	 }
 }

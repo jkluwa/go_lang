@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .form {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+        body {
+            display: flex;
+            justify-content: space-between;
+        }
+    </style>
+    <script>
+
+        function writeStudents() {
+            const xhttp = new XMLHttpRequest()
+            xhttp.onreadystatechange = () => {
+                document.getElementById("students").innerHTML = xhttp.responseText
+            }
+            xhttp.open("GET", "http://localhost:8080/v1/student")
+            
+            xhttp.send()
+        }
+        
+        function getRole() {
+            const xhttp = new XMLHttpRequest()
+            xhttp.onreadystatechange = () => {
+                document.getElementById("role").innerHTML = xhttp.responseText
+            }
+            xhttp.open("POST", "http://localhost:8080/v2/role")
+            xhttp.setRequestHeader("Authorization", window.localStorage.getItem("access_token"))
+            xhttp.send()
+        }
+
+        function add() {
+            const xhttp = new XMLHttpRequest()
+            const name = document.getElementById("addName").value
+            const surname = document.getElementById("addSurname").value
+            const age = document.getElementById("addAge").value
+            xhttp.open("POST", "http://localhost:8080/v1/student")
+            xhttp.withCredentials = false
+            let json = JSON.stringify({
+                Name: name,
+                Surname: surname,
+                Age: age
+            })
+            xhttp.setRequestHeader("Content-type", "application/json")
+            xhttp.setRequestHeader("Authorization", window.localStorage.getItem("access_token"))
+            xhttp.send(json)
+            
+            }
+        function del() {
+            const xhttp = new XMLHttpRequest()
+            const id = document.getElementById("deleteId").value
+            xhttp.open("DELETE", "http://localhost:8080/v1/student/"+id)
+            xhttp.withCredentials = false
+            xhttp.setRequestHeader("Content-type", "application/json")
+            xhttp.setRequestHeader("Authorization", window.localStorage.getItem("access_token"))
+            xhttp.send()
+        }
+        function update() {
+            const xhttp = new XMLHttpRequest()
+            const id = document.getElementById("updateId").value
+            const name = document.getElementById("updateName").value
+            const surname = document.getElementById("updateSurname").value
+            const age = document.getElementById("updateAge").value
+            xhttp.open("PUT", "http://localhost:8080/v1/student/"+id)
+            xhttp.withCredentials = false
+            xhttp.setRequestHeader("Content-type", "application/json")
+            xhttp.setRequestHeader("Authorization", window.localStorage.getItem("access_token"))
+            console.log(window.localStorage.getItem("access_token"))
+            let json = JSON.stringify({
+                Name: name,
+                Surname: surname,
+                Age: age
+            })
+            xhttp.send(json)
+        }
+        function login() {
+            const xhttp = new XMLHttpRequest()
+            const username = document.getElementById("loginName")
+            const password = document.getElementById("loginPassword")
+            xhttp.open("POST", "http://localhost:8080/v2/login")
+            xhttp.withCredentials = false
+            xhttp.setRequestHeader("Content-type", "application/json")
+            let json = JSON.stringify({
+                username: username.value,
+                password: password.value,
+            })
+            //xhttp.getResponseHeader("Content-type", "application/json")
+            xhttp.send(json)
+            //document.getElementById("tescior").innerHTML = xhttp.getAllResponseHeaders
+            xhttp.onreadystatechange = () => {
+                var response = JSON.parse(xhttp.responseText)
+                window.localStorage.setItem("access_token", response.access_token)
+                window.localStorage.setItem("refresh_token", response.refresh_token)
+            }
+            
+        }
+        function register() {
+            const xhttp = new XMLHttpRequest()
+            const username = document.getElementById("registerName").value
+            const password = document.getElementById("registerPassword").value
+            const role = document.getElementById("registerRole").value
+            xhttp.open("POST", "http://localhost:8080/v2/register")
+            xhttp.withCredentials = false
+            xhttp.setRequestHeader("Content-type", "application/json")
+            let json = JSON.stringify({
+                username: username,
+                password: password,
+                role: role,
+            })
+            xhttp.send(json)
+            xhttp.onreadystatechange = () => {
+                console.log(xhttp.responseText)
+            }
+        }
+    </script>
+</head>
+<body>
+    <div id="role"></div>
+    <div class="form">
+        <label>username</label><input id="registerName" name="name" type="text" />
+        <label>password</label><input id="registerPassword" name="password" type="password" />
+        <label>role</label>
+        <select name="role" id="registerRole">
+            <option value="administrator">administrator</option>
+            <option value="developer">developer</option>
+        </select>
+        <button onclick="return register()" >Register</button>
+    </div>
+
+    <div class="form">
+        <label>username</label><input id="loginName" name="name" type="text" />
+        <label>password</label><input id="loginPassword" name="password" type="password" />
+        <button onclick="return login()" >Login</button>
+    </div>
+
+    <div class="form">
+        <label>name</label><input id="addName" name="name" type="text" />
+        <label>surname</label><input id="addSurname" name="surname" type="text" />
+        <label>age</label><input id="addAge" name="age" type="number" min="5" />
+        <button onclick="return add()" >Add student</button>
+    </div>
+    <div class="form">
+        <label>id</label><input id="deleteId" type="text" />
+        <button onclick="return del()" >Delete student</button>
+    </div>
+    <div class="form">
+        <label>id</label><input type="text" id="updateId">
+        <label>name</label><input id="updateName" type="text" />
+        <label>username</label><input id="updateSurname" type="text" />
+        <label>age</label><input id="updateAge" type="number" min="5" />
+        <button onclick="return update()" >Update student</button>
+    </div>
+    <div id="students"></div>
+    <script>
+    writeStudents()
+    if(window.localStorage.getItem("access_token")) {
+        getRole()
+    }
+    </script>
+</body>
+</html>

@@ -1,21 +1,27 @@
 package ApiHelpers
 
 import (
-	"fmt"
-
+	"encoding/json"
 	"github.com/gin-gonic/gin"
 )
 
-type ResponseData struct {
-	Status int
-	Meta   interface{}
-	Data   interface{}
+type token struct {
+	Access	string
+	Refresh	string
 }
 
 func RespondJSON(w *gin.Context, status int, payload interface{}) {
-	fmt.Println("status ", status)
-	var res ResponseData
-	res.Status = status
-	res.Data = payload
-	w.JSON(200, res)
+	_, ok := payload.(map[string]string)
+	if ok {
+		var err error
+		p, err := json.Marshal(payload)
+		if err != nil {
+			status = 400
+			p = []byte("ERROR")
+		} 
+		w.Data(status, "application/json", p)
+		return
+	}
+	
+	w.JSON(status, payload)
 }
