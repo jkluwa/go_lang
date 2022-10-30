@@ -26,7 +26,7 @@ func SetupRouter() *gin.Engine {
 		v2.POST("login", Controllers.UserLogin)
 		v2.POST("logout", Authentication.TokenAuthMiddleware(), Controllers.UserLogout)
 		v2.POST("register", Controllers.UserRegister)
-		v2.POST("refresh", Authentication.TokenAuthMiddleware(), Controllers.TokenRefresh)
+		v2.POST("refresh", Controllers.TokenRefresh)
 		v2.POST("role", Authentication.TokenAuthMiddleware(), Controllers.GetRole)
 	}
 	r.LoadHTMLGlob("sites/*.html")

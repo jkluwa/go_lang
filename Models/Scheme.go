@@ -1,6 +1,7 @@
 package Models
 
 import (
+	"time"
 	"gorm.io/gorm"
 )
 
@@ -29,6 +30,6 @@ type TokenDetails struct {
 
 type AccessDetails struct {
     AccessUuid string
-    UserId   uint64
 	UserRole string
+	exp time.Duration
 }

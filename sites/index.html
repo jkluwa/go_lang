@@ -17,109 +17,124 @@
         }
     </style>
     <script>
-
         function writeStudents() {
-            const xhttp = new XMLHttpRequest()
-            xhttp.onreadystatechange = () => {
-                document.getElementById("students").innerHTML = xhttp.responseText
+            const writeXhttp = new XMLHttpRequest()
+            writeXhttp.onreadystatechange = () => {
+                document.getElementById("students").innerHTML = writeXhttp.responseText
             }
-            xhttp.open("GET", "http://localhost:8080/v1/student")
+            writeXhttp.open("GET", "http://localhost:8080/v1/student")
             
-            xhttp.send()
+            writeXhttp.send()
         }
-        
-        function getRole() {
-            const xhttp = new XMLHttpRequest()
-            xhttp.onreadystatechange = () => {
-                document.getElementById("role").innerHTML = xhttp.responseText
+        function Refresh() {
+            const refreshXhttp = new XMLHttpRequest()
+            refreshXhttp.open("POST", "http://localhost:8080/v2/refresh")
+            refreshXhttp.setRequestHeader("Refresh", window.localStorage.getItem("refresh_token"))
+            refreshXhttp.send()
+            refreshXhttp.onreadystatechange = () => {
+                switch (document.readyState) {
+                    case "complete": 
+                        var response = JSON.parse(refreshXhttp.responseText)
+                        window.localStorage.setItem("access_token", response.access_token)
+                        window.localStorage.setItem("refresh_token", response.refresh_token)
+                }
             }
-            xhttp.open("POST", "http://localhost:8080/v2/role")
-            xhttp.setRequestHeader("Authorization", window.localStorage.getItem("access_token"))
-            xhttp.send()
+        }
+        function getRole() {
+            const roleXhttp = new XMLHttpRequest()
+            roleXhttp.onreadystatechange = () => {
+                if(roleXhttp.responseText == "administrator") {
+                    document.getElementById("role").innerHTML = "hello administrator, you can do anyhing"
+                } else if (roleXhttp.responseText == "developer") {
+                    document.getElementById("role").innerHTML = "hello developer, you can update students' informations"
+                } else {
+                    
+                    //Refresh();
+                }
+                
+            }
+            roleXhttp.open("POST", "http://localhost:8080/v2/role")
+            roleXhttp.setRequestHeader("Authorization", window.localStorage.getItem("access_token"))
+            roleXhttp.send()
         }
 
         function add() {
-            const xhttp = new XMLHttpRequest()
+            const addXhttp = new XMLHttpRequest()
             const name = document.getElementById("addName").value
             const surname = document.getElementById("addSurname").value
             const age = document.getElementById("addAge").value
-            xhttp.open("POST", "http://localhost:8080/v1/student")
-            xhttp.withCredentials = false
+            addXhttp.open("POST", "http://localhost:8080/v1/student")
+            addXhttp.withCredentials = false
             let json = JSON.stringify({
                 Name: name,
                 Surname: surname,
                 Age: age
             })
-            xhttp.setRequestHeader("Content-type", "application/json")
-            xhttp.setRequestHeader("Authorization", window.localStorage.getItem("access_token"))
-            xhttp.send(json)
+            addXhttp.setRequestHeader("Content-type", "application/json")
+            addXhttp.setRequestHeader("Authorization", window.localStorage.getItem("access_token"))
+            addXhttp.send(json)
             
             }
         function del() {
-            const xhttp = new XMLHttpRequest()
+            const delXhttp = new XMLHttpRequest()
             const id = document.getElementById("deleteId").value
-            xhttp.open("DELETE", "http://localhost:8080/v1/student/"+id)
-            xhttp.withCredentials = false
-            xhttp.setRequestHeader("Content-type", "application/json")
-            xhttp.setRequestHeader("Authorization", window.localStorage.getItem("access_token"))
-            xhttp.send()
+            delXhttp.open("DELETE", "http://localhost:8080/v1/student/"+id)
+            delXhttp.withCredentials = false
+            delXhttp.setRequestHeader("Content-type", "application/json")
+            delXhttp.setRequestHeader("Authorization", window.localStorage.getItem("access_token"))
+            delXhttp.send()
         }
         function update() {
-            const xhttp = new XMLHttpRequest()
+            const updateXhttp = new XMLHttpRequest()
             const id = document.getElementById("updateId").value
             const name = document.getElementById("updateName").value
             const surname = document.getElementById("updateSurname").value
             const age = document.getElementById("updateAge").value
-            xhttp.open("PUT", "http://localhost:8080/v1/student/"+id)
-            xhttp.withCredentials = false
-            xhttp.setRequestHeader("Content-type", "application/json")
-            xhttp.setRequestHeader("Authorization", window.localStorage.getItem("access_token"))
-            console.log(window.localStorage.getItem("access_token"))
+            updateXhttp.open("PUT", "http://localhost:8080/v1/student/"+id)
+            updateXhttp.withCredentials = false
+            updateXhttp.setRequestHeader("Content-type", "application/json")
+            updateXhttp.setRequestHeader("Authorization", window.localStorage.getItem("access_token"))
             let json = JSON.stringify({
                 Name: name,
                 Surname: surname,
                 Age: age
             })
-            xhttp.send(json)
+            updateXhttp.send(json)
         }
         function login() {
-            const xhttp = new XMLHttpRequest()
+            const loginXhttp = new XMLHttpRequest()
             const username = document.getElementById("loginName")
             const password = document.getElementById("loginPassword")
-            xhttp.open("POST", "http://localhost:8080/v2/login")
-            xhttp.withCredentials = false
-            xhttp.setRequestHeader("Content-type", "application/json")
+            loginXhttp.open("POST", "http://localhost:8080/v2/login")
+            loginXhttp.withCredentials = false
+            //xhttp.setRespondHeader("Content-type", "application/json")
+            loginXhttp.setRequestHeader("Content-type", "application/json")
             let json = JSON.stringify({
                 username: username.value,
                 password: password.value,
             })
-            //xhttp.getResponseHeader("Content-type", "application/json")
-            xhttp.send(json)
-            //document.getElementById("tescior").innerHTML = xhttp.getAllResponseHeaders
-            xhttp.onreadystatechange = () => {
-                var response = JSON.parse(xhttp.responseText)
+            loginXhttp.send(json)
+            loginXhttp.onreadystatechange = () => {
+                var response = JSON.parse(loginXhttp.responseText)
                 window.localStorage.setItem("access_token", response.access_token)
                 window.localStorage.setItem("refresh_token", response.refresh_token)
             }
             
         }
         function register() {
-            const xhttp = new XMLHttpRequest()
+            const registerXhttp = new XMLHttpRequest()
             const username = document.getElementById("registerName").value
             const password = document.getElementById("registerPassword").value
             const role = document.getElementById("registerRole").value
-            xhttp.open("POST", "http://localhost:8080/v2/register")
-            xhttp.withCredentials = false
-            xhttp.setRequestHeader("Content-type", "application/json")
+            registerXhttp.open("POST", "http://localhost:8080/v2/register")
+            registerXhttp.withCredentials = false
+            registerXhttp.setRequestHeader("Content-type", "application/json")
             let json = JSON.stringify({
                 username: username,
                 password: password,
                 role: role,
             })
-            xhttp.send(json)
-            xhttp.onreadystatechange = () => {
-                console.log(xhttp.responseText)
-            }
+            registerXhttp.send(json)
         }
     </script>
 </head>

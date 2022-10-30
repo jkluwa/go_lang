@@ -1,10 +1,9 @@
 package Models
 
 import (
-	//"encoding/hex"
 	"errors"
 	"praktyka/Config"
-
+	"time"
 	"golang.org/x/crypto/bcrypt"
 )
 
@@ -39,4 +38,36 @@ func AddUser(user *User) (err error) {
 		return err
 	}
 	return nil
+}
+
+func CreateAuth(role string, td *TokenDetails) error {
+	at := time.Unix(td.AtExpires, 0)
+	rt := time.Unix(td.RtExpires, 0)
+
+	now := time.Now()
+	errAccess := Config.DB.Create(AccessDetails{td.AccessUuid, role, at.Sub(now)}).Error
+	if errAccess != nil {
+		return errAccess
+	}
+
+	errRefresh := Config.DB.Create(AccessDetails{td.RefreshUuid, role, rt.Sub(now)}).Error
+	if errRefresh != nil { 
+		return errRefresh
+	}
+	return nil
+}
+
+func FetchAuth(authD *AccessDetails) (string) {
+	var count int64
+	Config.DB.Model(authD).Where("access_uuid = ?", authD.AccessUuid).Count(&count)
+	if count != 0 {
+		Config.DB.Model(authD).Where("access_uuid = ?", authD.AccessUuid).First(&authD)
+		
+		return authD.UserRole
+	}
+	return ""
+}
+
+func DeleteAuth(uuid string) {
+	Config.DB.Where("access_uuid = ?", uuid).Delete(AccessDetails{})
 }

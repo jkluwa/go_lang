@@ -6,7 +6,6 @@ import (
 	"praktyka/Routers"
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
-	"praktyka/Authentication"
 ) 
 
 var err error
@@ -25,16 +24,13 @@ var err error
 // @host      localhost:8080
 // @BasePath  /v1
 
-func init() {
-	Authentication.RedisInit()
-}
 
 func main() {
 	Config.DB, err = gorm.Open(sqlite.Open("school.db"), &gorm.Config{})
 	if err != nil {
 		panic("failed to connect database")
 	}
-	Config.DB.AutoMigrate(&Models.Student{}, &Models.User{})
+	Config.DB.AutoMigrate(&Models.Student{}, &Models.User{}, &Models.AccessDetails{})
 
 	r := Routers.SetupRouter()
 	r.Run() // listen and serve on 0.0.0.0:8080 (for windows "localhost:8080")
